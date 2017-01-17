@@ -1,8 +1,9 @@
 var lat, lon, tempUnit = 'f', tempUnitQuery = {c: "metric", f: "imperial", k: "standard"};
+
 $(document).ready(function() {
 	getUnitBtns();
 	getLoc();
-	$("#getWeather").on("click", getWeather);
+	$("#getWeather").on("click", getWeather).prop( "disabled", true );
 	$("#unitBtns>button").on("click", function(e) {changeUnit(e.target.dataset.unit)})
 });
 
@@ -19,17 +20,19 @@ function getLoc() {
 		lat = pos.coords.latitude.toFixed(3);
 		lon = pos.coords.longitude.toFixed(3);
 		$("#info>h5").html("Your location: " + lat + ",&nbsp;" + lon);
+		$("button").prop( "disabled", false );
 		getPlaceName();
 	});
 }
 
 function getWeather() {
+	console.log(lat,lon);
 	lat = lat || 40.713;
 	lon = lon || -74.001;
-	var url = "https://weather.millergeek.xyz/data/2.5/weather?lat=" + 
-		lat + "&lon=" + lon + "&units="+tempUnitQuery[tempUnit]+"&APPID=" + thisKey;
+	var url = "https://weather.millergeek.xyz/data/2.5/weather?lat=" +
+		lat + "&lon=" + lon + "&units="+tempUnitQuery[tempUnit]+"&APPID=" + OWMKey;
 	$.getJSON(url, function(res) {
-		$("#currentTemp").html('<h1>' + res.main.temp.toFixed(1) + 
+		$("#currentTemp").html('<h1>' + res.main.temp.toFixed(1) +
 			'<span id="tempUnit"> &deg;'+tempUnit.toUpperCase()+'</span></h1>')
 			.append('<div>' + res.weather[0].description + '</div>')
 			.append('<img src="https://openweathermap.org/img/w/' +
@@ -39,7 +42,7 @@ function getWeather() {
 
 function getPlaceName() {
 	var url = 'https://www.mapquestapi.com/geocoding/v1/reverse?location=' +
-		lat + ',' + lon + '&key=tLZ9lun3BrzII2GGvAqftIFd0DSevdpb&thumbMaps=false';
+		lat + ',' + lon + '&key='+MQKey+'&thumbMaps=false';
 	$.getJSON(url, showPlaceName)
 }
 
@@ -55,7 +58,8 @@ function changeUnit (unit){
 	getUnitBtns();
 	getWeather();
 }
-//yes, this shouldn't be public, but there's no other reasonable way to do this challenge in codepen -_- 
-var thisKey = 'ca280b6058642b4e5c845c013761f8ad';
+//yes, this shouldn't be public, but there's no other reasonable way to do this challenge in CodePen -_-
+var OWMKey = 'ca280b6058642b4e5c845c013761f8ad';
+var MQKey = 'tLZ9lun3BrzII2GGvAqftIFd0DSevdpb';
 
 //TODO: refactor to pass values instead of globals
