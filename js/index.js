@@ -8,9 +8,14 @@ $(document).ready(function() {
 });
 
 function getUnitBtns() {
-	$("#unitBtns>button[data-unit="+tempUnit+"]").css({display: 'none', opacity:0});
+	$("#unitBtns>button[data-unit="+tempUnit+"]").css({
+		display: 'none',
+		opacity:0
+	});
 	$("#unitBtns>button[data-unit!="+tempUnit+"]").css({
-		display: 'inline-block', opacity:0.8, transition: 'opacity 2s'
+		display: 'inline-block',
+		opacity:0.8,
+		transition: 'opacity 2s'
 	});
 }
 
@@ -26,7 +31,6 @@ function getLoc() {
 }
 
 function getWeather() {
-	console.log(lat,lon);
 	lat = lat || 40.713;
 	lon = lon || -74.001;
 	var url = "https://weather.millergeek.xyz/data/2.5/weather?lat=" +
